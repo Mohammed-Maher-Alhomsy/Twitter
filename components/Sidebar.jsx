@@ -16,7 +16,7 @@ import SidebarMenuItem from "./SidebarMenuItem";
 
 const Sidebar = () => {
   return (
-    <div className="hidden sm:flex flex-col p-2 xl:items-start fixed h-full">
+    <div className="hidden sm:flex flex-col p-2 xl:items-start fixed h-full bg-red-100">
       <div className="hoverEffect p-0 hover:bg-blue-100">
         <Image
           src={
