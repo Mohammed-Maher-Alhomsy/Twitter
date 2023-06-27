@@ -13,7 +13,7 @@ const Input = () => {
         className="w-11 h-11 rounded-full object-cover cursor-pointer hover:brightness-95"
       />
 
-      <div className="w-full divide-y ">
+      <div className="w-full divide-y">
         <div className="">
           <textarea
             className="w-full border-none focus:ring-0 text-lg placeholder:text-gray-700 placeholder:tracking-wide min-h-[50px] text-gray-700"
@@ -27,6 +27,7 @@ const Input = () => {
             <PhotoIcon className="h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100" />
             <FaceSmileIcon className="h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100" />
           </div>
+
           <button className="bg-blue-400 text-white px-4 py-1.5 rounded-full font-bold shadow-md hover:brightness-95 disabled:opacity-50">
             Tweet
           </button>
