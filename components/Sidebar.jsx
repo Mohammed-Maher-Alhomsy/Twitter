@@ -20,7 +20,7 @@ const Sidebar = () => {
       <div className="hoverEffect p-0 hover:bg-blue-100">
         <Image
           src={
-            "https://twitter-v3.vercel.app/_next/image?url=https%3A%2F%2Fhelp.twitter.com%2Fcontent%2Fdam%2Fhelp-twitter%2Fbrand%2Flogo.png&w=64&q=75"
+            "https://help.twitter.com/content/dam/help-twitter/brand/logo.png"
           }
           alt="LOGO"
           width={50}
