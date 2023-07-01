@@ -75,4 +75,3 @@ const Widgets = ({ newsArticle, randomUsersResults }) => {
 };
 
 export default Widgets;
-// 250 948 7524
