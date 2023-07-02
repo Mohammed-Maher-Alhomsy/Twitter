@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 import {
   ChartBarIcon,
   ChatBubbleOvalLeftEllipsisIcon,
@@ -6,18 +8,18 @@ import {
   ShareIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
-import Image from "next/image";
+import Moment from "react-moment";
 
 const Post = ({ post }) => {
+  const dateToFormat = post.data().timestamp.toDate();
+
   return (
     <div className="flex p-3 cursor-pointer border-b border-gray-200">
       {/* user Image */}
-      <Image
-        src={post.userImg}
+      <img
+        src={post.data().userImage}
         alt="userPhoto"
         className="h-11 w-11 rounded-full object-cover mr-4"
-        width={200}
-        height={200}
       />
 
       {/* Right Side */}
@@ -28,12 +30,14 @@ const Post = ({ post }) => {
 
           <div className="flex items-center space-x-1 whitespace-nowrap">
             <h4 className="font-bold text-[15px] sm:text-[16px] hover:underline">
-              {post.name}
+              {post.data().name}
             </h4>
 
-            <span className="text-sm sm:text-[15px]">@{post.username} -</span>
+            <span className="text-sm sm:text-[15px]">
+              @{post.data().username} -
+            </span>
             <span className="text-sm sm:text-[15px] hover:underline">
-              {post.timestamp}
+              <Moment date={dateToFormat} fromNow />
             </span>
           </div>
 
@@ -43,17 +47,17 @@ const Post = ({ post }) => {
 
         {/* Post Text */}
         <p className="text-gray-800 text-[15px] sm:text-[16px] mb-2">
-          {post.text}
+          {post.data().text}
         </p>
 
         {/* Post Image */}
 
-        <Image
+        <img
+          src={post.data().image}
+          className="rounded-2xl mr-2"
+          loading="lazy"
           width={500}
           height={500}
-          src={post.img}
-          className="rounded-2xl mr-2"
-          alt="postImage"
         />
 
         {/* Icons */}
