@@ -2,7 +2,6 @@
 import { getProviders, signIn } from "next-auth/react";
 
 const Signin = ({ providers }) => {
-  console.log(Object.values(providers));
   return (
     <div className="flex justify-center mt-20 space-x-4">
       <img
