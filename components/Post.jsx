@@ -23,7 +23,7 @@ import { signIn, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { deleteObject, ref } from "firebase/storage";
 import { useRecoilState } from "recoil";
-import { modalState } from "../atom/modalAtom";
+import { modalState, postIdState } from "../atom/modalAtom";
 
 const Post = ({ post }) => {
   const dateToFormat = post?.data()?.timestamp?.toDate();
@@ -31,6 +31,7 @@ const Post = ({ post }) => {
   const [likes, setLikes] = useState([]);
   const [hasLiked, setHasLiked] = useState(false);
   const [open, setOpen] = useRecoilState(modalState);
+  const [postId, setPostId] = useRecoilState(postIdState);
 
   const likePost = async () => {
     if (session === null) {
@@ -126,7 +127,14 @@ const Post = ({ post }) => {
 
         <div className="flex items-center justify-between text-gray-500 p-2">
           <ChatBubbleOvalLeftEllipsisIcon
-            onClick={() => setOpen((prevState) => !prevState)}
+            onClick={() => {
+              if (!session) {
+                signIn();
+                return;
+              }
+              setPostId(post.id);
+              setOpen((prevState) => !prevState);
+            }}
             className="hoverEffect w-9 h-9 p-2 hover:text-sky-500 hover:bg-sky-100"
           />
 
