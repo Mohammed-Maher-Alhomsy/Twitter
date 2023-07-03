@@ -47,8 +47,11 @@ const Post = ({ post }) => {
   const deletePost = async () => {
     if (confirm("Are you sure you want to delete this post?")) {
       await deleteDoc(doc(db, "posts", post.id));
-      const imageRef = ref(storage, `posts/${post.id}/image`);
-      deleteObject(imageRef);
+
+      if (post.data().image) {
+        const imageRef = ref(storage, `posts/${post.id}/image`);
+        deleteObject(imageRef);
+      }
     }
   };
 
@@ -106,13 +109,15 @@ const Post = ({ post }) => {
 
         {/* Post Image */}
 
-        <img
-          src={post.data().image}
-          className="rounded-2xl mr-2"
-          loading="lazy"
-          width={500}
-          height={500}
-        />
+        {post.data().image && (
+          <img
+            src={post.data().image}
+            className="rounded-2xl mr-2"
+            loading="lazy"
+            width={500}
+            height={500}
+          />
+        )}
 
         {/* Icons */}
 
