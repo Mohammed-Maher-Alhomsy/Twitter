@@ -18,12 +18,13 @@ import {
   setDoc,
 } from "firebase/firestore";
 import Moment from "react-moment";
-import { db } from "../firebase";
+import { db, storage } from "../firebase";
 import { signIn, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { deleteObject, ref } from "firebase/storage";
 
 const Post = ({ post }) => {
-  const dateToFormat = post.data().timestamp.toDate();
+  const dateToFormat = post?.data()?.timestamp?.toDate();
   const { data: session } = useSession();
   const [likes, setLikes] = useState([]);
   const [hasLiked, setHasLiked] = useState(false);
@@ -40,6 +41,14 @@ const Post = ({ post }) => {
       await setDoc(doc(db, "posts", post.id, "likes", session.user.uid), {
         username: session.user.username,
       });
+    }
+  };
+
+  const deletePost = async () => {
+    if (confirm("Are you sure you want to delete this post?")) {
+      await deleteDoc(doc(db, "posts", post.id));
+      const imageRef = ref(storage, `posts/${post.id}/image`);
+      deleteObject(imageRef);
     }
   };
 
@@ -109,7 +118,13 @@ const Post = ({ post }) => {
 
         <div className="flex items-center justify-between text-gray-500 p-2">
           <ChatBubbleOvalLeftEllipsisIcon className="hoverEffect w-9 h-9 p-2 hover:text-sky-500 hover:bg-sky-100" />
-          <TrashIcon className="hoverEffect w-9 h-9 p-2 hover:text-red-600 hover:bg-red-100" />
+
+          {session?.user.uid === post?.data().id && (
+            <TrashIcon
+              onClick={deletePost}
+              className="hoverEffect w-9 h-9 p-2 hover:text-red-600 hover:bg-red-100"
+            />
+          )}
 
           <div className="flex items-center">
             {hasLiked ? (
