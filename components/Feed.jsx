@@ -15,6 +15,7 @@ import { data } from "autoprefixer";
 
 const Feed = () => {
   const [posts, setPosts] = useState([]);
+
   useEffect(() => {
     const unsubscribe = onSnapshot(
       query(collection(db, "posts"), orderBy("timestamp", "desc")),
