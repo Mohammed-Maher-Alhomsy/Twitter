@@ -15,9 +15,11 @@ import {
 
 import { signIn, signOut, useSession } from "next-auth/react";
 import SidebarMenuItem from "./SidebarMenuItem";
+import { useRouter } from "next/router";
 
 const Sidebar = () => {
   const { data: session } = useSession();
+  const router = useRouter();
 
   const button = session ? (
     <button className="bg-blue-400 text-white rounded-full w-56 h-12 font-bold shadow-md hover:brightness-95 text-lg hidden xl:inline">
@@ -42,6 +44,7 @@ const Sidebar = () => {
           alt="LOGO"
           width={50}
           height={50}
+          onClick={() => router.push("/")}
         />
       </div>
 
