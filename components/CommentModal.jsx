@@ -8,10 +8,17 @@ import {
   XCircleIcon,
 } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
-import { doc, onSnapshot } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  onSnapshot,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import Moment from "react-moment";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const CommentModal = () => {
   const { data: session } = useSession();
@@ -20,13 +27,30 @@ const CommentModal = () => {
   const [post, setPost] = useState({});
   const [input, setInput] = useState("");
 
+  const router = useRouter();
+
   useEffect(() => {
     onSnapshot(doc(db, "posts", postId), (doc) => {
       setPost(doc.data());
     });
   }, [postId]);
 
-  const sendComment = () => {};
+  const sendComment = async () => {
+    // await setDoc(doc(db, "posts", postId, "comments", session.user.uid), {
+    //   username: session.user.username,
+    // });
+    await addDoc(collection(db, "posts", postId, "comments"), {
+      comment: input,
+      name: session.user.name,
+      username: session.user.username,
+      userImg: session.user.image,
+      timestamp: serverTimestamp(),
+    });
+
+    setOpen(false);
+    setInput("");
+    router.push(`/posts/${postId}`);
+  };
 
   return (
     <div>
@@ -39,7 +63,9 @@ const CommentModal = () => {
             "max-w-lg w-[90%] absolute top-24 left-[50%] translate-x-[-50%] bg-white border-2 border-gray-300 rounded-xl shadow-md"
           }
         >
+          {/* Container */}
           <div className="p-1">
+            {/* X Icon */}
             <div className="border-b border-gray-200 py-2 px-1.5">
               <div
                 onClick={() => setOpen(false)}
@@ -49,6 +75,7 @@ const CommentModal = () => {
               </div>
             </div>
 
+            {/* Post Data: image, name and username */}
             <div className="p-2 flex items-center space-x-1 relative">
               <span className="w-0.5 h-full bg-gray-300 absolute top-[52px] left-8 -z-10" />
               <img
@@ -69,11 +96,12 @@ const CommentModal = () => {
                 <Moment date={post?.timestamp?.toDate()} fromNow />
               </span>
             </div>
-
+            {/* Post Test */}
             <p className="text-gray-500 text-[15px] sm:text-[16px] ml-16 mb-2">
               {post?.text}
             </p>
 
+            {/* Container of reply */}
             <div className="flex p-3 space-x-3">
               <img
                 src={session?.user.image}

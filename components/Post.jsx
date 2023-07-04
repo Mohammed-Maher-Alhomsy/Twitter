@@ -29,6 +29,7 @@ const Post = ({ post }) => {
   const dateToFormat = post?.data()?.timestamp?.toDate();
   const { data: session } = useSession();
   const [likes, setLikes] = useState([]);
+  const [comments, setComments] = useState([]);
   const [hasLiked, setHasLiked] = useState(false);
   const [open, setOpen] = useRecoilState(modalState);
   const [postId, setPostId] = useRecoilState(postIdState);
@@ -74,6 +75,15 @@ const Post = ({ post }) => {
     );
   }, [session?.user.uid, likes]);
 
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, "posts", post.id, "comments"),
+      (snapshot) => {
+        setComments(snapshot.docs);
+      }
+    );
+  }, [post.id]);
+
   return (
     <div className="flex p-3 cursor-pointer border-b border-gray-200">
       {/* user Image */}
@@ -84,7 +94,7 @@ const Post = ({ post }) => {
       />
 
       {/* Right Side */}
-      <div className="">
+      <div className="flex-1">
         {/* Header */}
         <div className="flex items-center justify-between">
           {/* post user info */}
@@ -126,17 +136,22 @@ const Post = ({ post }) => {
         {/* Icons */}
 
         <div className="flex items-center justify-between text-gray-500 p-2">
-          <ChatBubbleOvalLeftEllipsisIcon
-            onClick={() => {
-              if (!session) {
-                signIn();
-                return;
-              }
-              setPostId(post.id);
-              setOpen((prevState) => !prevState);
-            }}
-            className="hoverEffect w-9 h-9 p-2 hover:text-sky-500 hover:bg-sky-100"
-          />
+          <div className="flex items-center select-none">
+            <ChatBubbleOvalLeftEllipsisIcon
+              onClick={() => {
+                if (!session) {
+                  signIn();
+                  return;
+                }
+                setPostId(post.id);
+                setOpen((prevState) => !prevState);
+              }}
+              className="hoverEffect w-9 h-9 p-2 hover:text-sky-500 hover:bg-sky-100"
+            />
+            {comments.length > 0 && (
+              <span className="text-sm">{comments.length}</span>
+            )}
+          </div>
 
           {session?.user.uid === post?.data().id && (
             <TrashIcon
@@ -145,7 +160,7 @@ const Post = ({ post }) => {
             />
           )}
 
-          <div className="flex items-center">
+          <div className="flex items-center select-none">
             {hasLiked ? (
               <HeartIconFill
                 onClick={likePost}
