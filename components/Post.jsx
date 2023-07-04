@@ -120,7 +120,10 @@ const Post = ({ post }) => {
         </div>
 
         {/* Post Text */}
-        <p className="text-gray-800 text-[15px] sm:text-[16px] mb-2">
+        <p
+          onClick={() => router.push(`/posts/${post.id}`)}
+          className="text-gray-800 text-[15px] sm:text-[16px] mb-2"
+        >
           {post.data()?.text}
         </p>
 
@@ -133,6 +136,7 @@ const Post = ({ post }) => {
             loading="lazy"
             width={500}
             height={500}
+            onClick={() => router.push(`/posts/${post.id}`)}
           />
         )}
 
