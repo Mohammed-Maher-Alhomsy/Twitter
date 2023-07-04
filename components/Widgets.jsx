@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { MagnifyingGlassCircleIcon } from "@heroicons/react/24/outline";
-import News from "./News";
+import News from "./news";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
