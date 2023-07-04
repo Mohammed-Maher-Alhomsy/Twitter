@@ -24,6 +24,7 @@ import { useEffect, useState } from "react";
 import { deleteObject, ref } from "firebase/storage";
 import { useRecoilState } from "recoil";
 import { modalState, postIdState } from "../atom/modalAtom";
+import { Router, useRouter } from "next/router";
 
 const Post = ({ post }) => {
   const dateToFormat = post?.data()?.timestamp?.toDate();
@@ -33,6 +34,7 @@ const Post = ({ post }) => {
   const [hasLiked, setHasLiked] = useState(false);
   const [open, setOpen] = useRecoilState(modalState);
   const [postId, setPostId] = useRecoilState(postIdState);
+  const router = useRouter();
 
   const likePost = async () => {
     if (session === null) {
@@ -50,6 +52,7 @@ const Post = ({ post }) => {
   };
 
   const deletePost = async () => {
+    router.push("/");
     if (confirm("Are you sure you want to delete this post?")) {
       await deleteDoc(doc(db, "posts", post.id));
 
@@ -88,7 +91,7 @@ const Post = ({ post }) => {
     <div className="flex p-3 cursor-pointer border-b border-gray-200">
       {/* user Image */}
       <img
-        src={post.data().userImage}
+        src={post?.data()?.userImage}
         alt="userPhoto"
         className="h-11 w-11 rounded-full object-cover mr-4"
       />
@@ -101,11 +104,11 @@ const Post = ({ post }) => {
 
           <div className="flex items-center space-x-1 whitespace-nowrap">
             <h4 className="font-bold text-[15px] sm:text-[16px] hover:underline">
-              {post.data().name}
+              {post?.data()?.name}
             </h4>
 
             <span className="text-sm sm:text-[15px]">
-              @{post.data().username} -
+              @{post.data()?.username} -
             </span>
             <span className="text-sm sm:text-[15px] hover:underline">
               <Moment date={dateToFormat} fromNow />
@@ -118,14 +121,14 @@ const Post = ({ post }) => {
 
         {/* Post Text */}
         <p className="text-gray-800 text-[15px] sm:text-[16px] mb-2">
-          {post.data().text}
+          {post.data()?.text}
         </p>
 
         {/* Post Image */}
 
-        {post.data().image && (
+        {post.data()?.image && (
           <img
-            src={post.data().image}
+            src={post.data()?.image}
             className="rounded-2xl mr-2"
             loading="lazy"
             width={500}
@@ -153,7 +156,7 @@ const Post = ({ post }) => {
             )}
           </div>
 
-          {session?.user.uid === post?.data().id && (
+          {session?.user.uid === post?.data()?.id && (
             <TrashIcon
               onClick={deletePost}
               className="hoverEffect w-9 h-9 p-2 hover:text-red-600 hover:bg-red-100"
