@@ -51,7 +51,7 @@ const PostPage = ({ newsArticle, randomUsersResults }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex justify-between min-h-screen mx-auto">
+      <main className="flex min-h-screen mx-auto">
         <Sidebar />
 
         <div className="xl:ml-[370px] border-l border-r border-gray-200 xl:min-w-[576px] sm:ml-[75px] flex-grow max-w-xl">
