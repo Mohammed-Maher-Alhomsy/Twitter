@@ -7,18 +7,39 @@ import { useRouter } from "next/router";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import Post from "../../components/Post";
 import { useEffect, useState } from "react";
-import { doc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import { db } from "../../firebase";
+import Comment from "../../components/Comment";
 
 const PostPage = ({ newsArticle, randomUsersResults }) => {
   const router = useRouter();
   const [post, setPost] = useState(null);
+  const [comments, setComments] = useState([]);
   const { postId } = router.query;
 
   useEffect(() => {
     onSnapshot(doc(db, "posts", postId), (doc) => {
       setPost(doc);
     });
+  }, [postId]);
+
+  // Get comments of the post
+  useEffect(() => {
+    onSnapshot(
+      query(
+        collection(db, "posts", postId, "comments"),
+        orderBy("timestamp", "desc")
+      ),
+      (snapshot) => {
+        setComments(snapshot.docs);
+      }
+    );
   }, [postId]);
 
   return (
@@ -47,6 +68,11 @@ const PostPage = ({ newsArticle, randomUsersResults }) => {
           </div>
 
           {post && <Post post={post} />}
+
+          {comments.length > 0 &&
+            comments.map((comment) => (
+              <Comment key={comment.id} comment={comment.data()} />
+            ))}
         </div>
 
         <Widgets
