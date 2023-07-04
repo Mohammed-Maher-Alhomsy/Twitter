@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
-import Img from "../assets/images/React.png";
 
 import { HomeIcon } from "@heroicons/react/24/solid";
 import {
